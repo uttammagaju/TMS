@@ -7,6 +7,6 @@ namespace TMS.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
             
-        public DbSet<Teacher> teachers { get; set; }
+        public DbSet<TeacherModel> Teachers { get; set; }
     }
 }

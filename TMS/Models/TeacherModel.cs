@@ -2,7 +2,7 @@
 
 namespace TMS.Models
 {
-    public class Teacher
+    public class TeacherModel
     {
         [Key]
         public int id { get; set; }
@@ -16,7 +16,7 @@ namespace TMS.Models
         public string address { get; set; }
         [Required]
         public string gender { get; set; }  
-        public string dob { get; set; }
+        public DateTime dob { get; set; }
         [Required]
         public string qualification { get; set; }
         public double salary { get; set; }
