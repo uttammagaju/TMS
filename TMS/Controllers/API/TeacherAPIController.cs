@@ -45,11 +45,16 @@ namespace TMS.Controllers.API
             _Teacher.UpdateTeacher(model);
             return NoContent();
         }
-
-        [HttpPost]
-        public ActionResult<bool> PostTeacher(TeacherModel model)
+        [HttpPost("PostTeacher")]
+        public ActionResult<bool> PostTeacher([FromBody] TeacherModel model)
         {
-            return Ok(_Teacher.CreateTeacher(model));
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var addTeacher = _Teacher.CreateTeacher(model);
+            return Ok(addTeacher);
         }
 
         [HttpDelete("{id}")]

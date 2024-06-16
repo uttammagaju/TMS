@@ -1,28 +1,33 @@
-﻿
+﻿/// <reference path="teacher.model.js" />
+
 
 var TeacherController = function () {
     const baseURL = "/api/TeacherAPI"
     var self = this;
     self.newTeacher = ko.observable(new TeacherModel())
     self.teachers = ko.observableArray([]);
-
-    ajax.get(baseURL).then(function (result) {
-        self.teachers(result);
-        var datas = ko.utils.arrayMap(result, (item) => {
-            return new TeacherModel(item);
+    self.getDatas = function () {
+        ajax.get(baseURL).then(function (result) {
+            self.teachers(result);
+            var datas = ko.utils.arrayMap(result, (item) => {
+                return new TeacherModel(item);
+            });
         });
-    });
-    self.AddTeacher = function () {
+    }
 
-        ajax.post(baseURL, ko.toJSON(new self.newTeacher()))
-            .done((result) => {
+    self.getDatas();
+    self.AddTeacher = function () {
+        ajax.post(baseURL + "/PostTeacher", ko.toJS(self.newTeacher()))
+            .done(function (result) {
                 self.teachers.push(new TeacherModel(result));
-                self.newTeacher(new TeacherModel());
-                console.log(self.newTeacher());
-            }).fail((err) => {
+                self.getDatas();
+
+            })
+            .fail((err) => {
                 console.log(err);
             });
     }
+
 }
 
     var ajax = {
@@ -48,3 +53,7 @@ var TeacherController = function () {
             });
     }
     }
+const mode = {
+    create: 1,
+    update: 2
+};
