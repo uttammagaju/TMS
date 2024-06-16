@@ -1,29 +1,24 @@
 ﻿
 
-var DepartmentController = function () {
-
+var TeacherController = function () {
+    const baseURL = "/api/TeacherAPI"
     var self = this;
-    self.newDepartment = ko.observable(new DepartmentModel())
-    self.departments = ko.observableArray();
-
-    const baseURL = "/api/DepartmentAPI"
-
-
-
+    self.newTeacher = ko.observable(new TeacherModel())
+    self.teachers = ko.observableArray([]);
 
     ajax.get(baseURL).then(function (result) {
-        self.departments(result);
+        self.teachers(result);
         var datas = ko.utils.arrayMap(result, (item) => {
-            return new DepartmentModel(item);
+            return new TeacherModel(item);
         });
     });
-    self.AddDepartment = function () {
+    self.AddTeacher = function () {
 
-        ajax.post(baseURL, ko.toJSON(new self.newDepartment()))
+        ajax.post(baseURL, ko.toJSON(new self.newTeacher()))
             .done((result) => {
-                self.departments.push(new DepartmentModel(result));
-                self.newDepartment(new DepartmentModel());
-                console.log(self.newDepartment());
+                self.teachers.push(new TeacherModel(result));
+                self.newTeacher(new TeacherModel());
+                console.log(self.newTeacher());
             }).fail((err) => {
                 console.log(err);
             });
