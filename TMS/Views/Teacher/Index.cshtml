@@ -6,13 +6,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Register Teacher</h5>
+
+                <h5 class="modal-title text-center" id="exampleModalLabel">
+                    <span data-bind="ifnot:IsUpdated">Register Teacher</span>
+                    <span data-bind="if:IsUpdated">Update Teacher</span>
+                </h5>
                 <button data-bind="click:$root.ClosedModel" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12  border-2 " style="border:2px solid #74777a; padding-top:40px">
-                        <h3 class="card-header text-align-center text-secondary"> New Teacher </h3>
                         <div class="card-body" data-bind="with:newTeacher">
                             <div class="form-group">
                                 <label for="firstName">First Name</label>
@@ -47,9 +50,9 @@
                                 
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-primary" data-bs-dismiss="modal" data-bind="click:$root.AddTeacher">Add
-                                @* <span data-bind="ifnot:IsUpdated">Add</span> *@
-                                @* <span data-bind="if:IsUpdated">Update</span> *@
+                            <button class="btn btn-primary" data-bs-dismiss="modal" data-bind="click:$root.AddTeacher">
+                                <span data-bind="ifnot:IsUpdated">Add</span> 
+                                <span data-bind="if:IsUpdated">Update</span>
                                 </button>
                             <button class="btn btn-primary" data-bind="click:$root.resetForm">Reset</button>
                         </div>
@@ -75,6 +78,7 @@
             <th>Date Of Birth</th>
             <th>Qualification</th>
             <th>Salary</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody data-bind="foreach:teachers">
@@ -87,6 +91,12 @@
             <td data-bind="text:dob"></td>
             <td data-bind="text:qualification"></td>
             <td data-bind="text:salary"></td>
+            <td>
+                <div class="btn-group btn-group-sm">
+                    <button data-bind="click: $root.SelectTeacher" class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button>
+                    <button data-bind="click: $root.DeleteTeacher" class="btn btn-sm btn-danger">Delete</button>
+                </div>
+            </td>
         </tr>
 
     </tbody>

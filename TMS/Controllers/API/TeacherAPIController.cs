@@ -36,14 +36,14 @@ namespace TMS.Controllers.API
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutTeacherModel(int id, TeacherModel model)
+        public IActionResult Update(int id, TeacherModel model)
         {
             if (id != model.id)
             {
                 return BadRequest();
             }
             _Teacher.UpdateTeacher(model);
-            return NoContent();
+            return Ok();
         }
         [HttpPost("PostTeacher")]
         public ActionResult<bool> PostTeacher([FromBody] TeacherModel model)
@@ -57,7 +57,7 @@ namespace TMS.Controllers.API
             return Ok(addTeacher);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteTeacher")]
         public int DeleteTeacher(int id)
         {
            return _Teacher.DeleteTeacher(id);
