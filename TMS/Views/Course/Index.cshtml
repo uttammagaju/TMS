@@ -1,0 +1,40 @@
+﻿<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#courseModel">
+    Register Teacher
+</button>
+
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Course Name</th>
+            <th>Credit Hour</th>
+            <th>Teacher</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody data-bind="foreach:Courses">
+        <tr>
+            <td data-bind="text:Id"></td>
+            <td data-bind="text:Name"></td>
+            <td data-bind="text:CreditHour"></td>
+            <td data-bind="text:TeacherId"></td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="~/js/jquery.js"></script>
+    <script src="~/js/knockout.js"></script>
+    <script src="~/js/course/Course.Controller.js"></script>
+    <script src="~/js/course/Course.Model.js"></script>
+    <script>
+        {
+            var obj = new CourseController();
+            ko.applyBindings(obj);
+        }
+    </script>
+}

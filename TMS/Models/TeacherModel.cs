@@ -21,6 +21,6 @@ namespace TMS.Models
         public string qualification { get; set; }
         public double salary { get; set; }
 
-
+         
     }
 }

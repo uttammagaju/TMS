@@ -8,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
-builder.Services.AddTransient<ITeacherServices, TeacherServices>();
+builder.Services.AddScoped<ITeacherServices, TeacherServices>();
+builder.Services.AddScoped<ICourseServices, CourseServices>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
