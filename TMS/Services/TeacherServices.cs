@@ -1,4 +1,6 @@
-﻿using TMS.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using TMS.Data;
+using TMS.Global;
 using TMS.Models;
 
 namespace TMS.Services
@@ -9,6 +11,7 @@ namespace TMS.Services
         public TeacherServices(ApplicationDbContext db) { 
         _db = db;
         }
+
         public bool CreateTeacher(TeacherModel model)
         {
             _db.Teachers.Add(model);
@@ -35,6 +38,17 @@ namespace TMS.Services
         {
             var data = _db.Teachers.FirstOrDefault(u =>u.id == id);
             return data;
+        }
+
+        public async Task<IEnumerable<DropdownVM>> GetAllAsync()
+        {
+            return await _db.Teachers
+                            .Select(t => new DropdownVM
+                            {
+                                id = t.id,
+                                name = t.firstName + " " + t.lastName
+                            })
+                            .ToListAsync();
         }
 
         public void UpdateTeacher(TeacherModel model)
