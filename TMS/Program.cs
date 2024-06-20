@@ -1,11 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using TMS.Data;
+using TMS.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
+builder.Services.AddScoped<ITeacherServices, TeacherServices>();
+builder.Services.AddScoped<ICourseServices, CourseServices>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -18,6 +22,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseRouting();
 
