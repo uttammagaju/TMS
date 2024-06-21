@@ -1,57 +1,53 @@
-﻿<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#courseModel">
+﻿<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#courseModel" data-bind="click: resetFormForRegister">
     Register Teacher
 </button>
 
-<div class="modal fade" id="courseModel" tabindex="-1" aria-labelledby="courseModelLabel" aria-hidden="true" data-bs-target="static" data-bs-keyboard="false">
+<div class="modal fade" id="courseModel" tabindex="-1" aria-labelledby="courseModelLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-center" id="courseModelLabel">
-                    Add Course
-                    
-                @*     <span data-bind="ifnot:IsUpdated">Register Course</span>
-                    <span data-bind="if:IsUpdated">Update Course</span> *@
+                    <span data-bind="ifnot: IsUpdated">Register Course</span>
+                    <span data-bind="if: IsUpdated">Update Course</span>
                 </h5>
-                <button data-bind="click:$root.ClosedModel" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" data-bind="with:NewCourse">
+            <div class="modal-body">
                 <div class="row">
-                    <div class="col-12  border-2 " style="border:2px solid #74777a; padding-top:40px">
-                        <div class="form-group">
-                            <label>Course Name</label>
-                            <input class="form-control"  data-bind="value:Name" />
+                    <div class="col-12 border-2" style="border: 2px solid #74777a; padding-top: 40px;">
+                        <div class="card-body" data-bind="with: NewCourse">
+                            <div class="form-group">
+                                <label>Course Name</label>
+                                <input class="form-control" data-bind="value: Name" />
+                            </div>
+                            <div class="form-group">
+                                <label>Credit Hour</label>
+                                <input class="form-control" data-bind="value: CreditHour" />
+                            </div>
+                            <div class="form-group">
+                                <label for="teacher">Teacher:</label>
+                                <select id="teacher" data-bind="options: $root.Teachers,
+                        optionsText: 'Name',
+                        optionsValue: 'Id',
+                        value: TeacherId,
+                        optionsCaption: 'Choose a teacher...'"></select>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Credit Hour</label>
-                            <input class="form-control"  data-bind="value:CreditHour" />
+                        <div class="card-footer">
+                            <button class="btn btn-primary" data-bs-dismiss="modal" data-bind="click: $root.AddCourse">
+                                <span data-bind="ifnot: IsUpdated">Add</span>
+                                <span data-bind="if: IsUpdated">Update</span>
+                            </button>
+                            <button class="btn btn-primary" data-bind="click: $root.resetForm">Reset</button>
                         </div>
-                        
-                        
-                        <div class="form-group">
-                        <label for="teacher">Teacher:</label>
-                            <select id="teacher" data-bind="options:$root.Teachers,
-                                optionsText: 'Name',
-                                optionsValue: 'Id',
-                                value: TeacherId,
-                                optionsCaption: 'Choose a teacher...'"></select>
-                        </div> 
+                        <br /><br />
                     </div>
-                    <div class="card-footer">
-                        <button class="btn btn-primary" data-bs-dismiss="modal" data-bind="click:$root.AddCourse">Add
-                            @* <span data-bind="ifnot:IsUpdated">Add</span>
-                            <span data-bind="if:IsUpdated">Update</span> *@
-                        </button>
-                        <button class="btn btn-primary" data-bind="click:$root.resetForm">Reset</button>
-                    </div>
-                    <br /><br />
-
                 </div>
             </div>
+
         </div>
     </div>
 </div>
-</div>
-
 
 <table class="table table-striped">
     <thead>
@@ -63,14 +59,17 @@
             <th>Action</th>
         </tr>
     </thead>
-
-    <tbody data-bind="foreach:Courses">
+    <tbody data-bind="foreach: Courses">
         <tr>
-            <td data-bind="text:Id"></td>
-            <td data-bind="text:Name"></td>
-            <td data-bind="text:CreditHour"></td>
-            <td data-bind="text:TeacherName"></td>
-            <td></td>
+            <td data-bind="text: Id"></td>
+            <td data-bind="text: Name"></td>
+            <td data-bind="text: CreditHour"></td>
+            <td data-bind="text: TeacherName"></td>
+            <td>
+                <button data-bind="click: $root.SelectCourse" class="btn btn-sm btn-dark" data-bs-toggle="modal" data-bs-target="#courseModel">Edit</button>
+                <button data-bind="click: $root.DeleteCourse" class="btn btn-sm btn-danger">Delete</button>
+
+            </td>
         </tr>
     </tbody>
 </table>

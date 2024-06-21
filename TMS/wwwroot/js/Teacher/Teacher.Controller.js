@@ -35,7 +35,8 @@ var TeacherController = function () {
                 ajax.post(baseURL + "/PostTeacher", ko.toJS(self.newTeacher()))
                     .done(function (result) {
                         self.teachers.push(new TeacherModel(result)); // Add the new teacher to the array
-                        self.getDatas();  // Refresh the list of teachers
+                        self.getDatas();
+                        self.resetForm()// Refresh the list of teachers
                     })
                     .fail((err) => {
                         console.log(err);  // Log any errors

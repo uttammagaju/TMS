@@ -1,19 +1,22 @@
-﻿/// <reference path="Course.Model.js" />
+﻿/// <reference path="teacher.model.js" />
 
+// Define modes for creating and updating teachers
 const mode = {
     create: 1,
     update: 2
 };
+
 var CourseController = function () {
     var self = this;
     const baseURL = "/api/CourseAPI";
     const teacherURL = "/api/CourseAPI/GetDropdownData";
+
     self.NewCourse = ko.observable(new CourseVM());
+    self.SelectedCourse = ko.observable(new CourseVM());
     self.Courses = ko.observableArray([]);
     self.Teachers = ko.observableArray([]);
     self.IsUpdated = ko.observable(false);
     self.mode = ko.observable(mode.create);
-    self.SelectedCourse = ko.observable(); 
 
     self.getDatas = function () {
         return ajax.get(baseURL).then(function (result) {
@@ -24,38 +27,38 @@ var CourseController = function () {
         });
     };
 
-    function getTeachers() {
-         return ajax.get(teacherURL)
-             .then(function (result) {
-                 var mappedTeachers = ko.utils.arrayMap(result, function (item) {
-                    return new DropdownVm(item);
-                });
-                self.Teachers(mappedTeachers);
-            })
-           
+    self.getTeachers = function () {
+        return ajax.get(teacherURL).then(function (result) {
+            var mappedTeachers = ko.utils.arrayMap(result, function (item) {
+                return new DropdownVm(item);
+            });
+            self.Teachers(mappedTeachers);
+        }).catch(function (error) {
+            console.error("Error fetching teachers:", error);
+        });
     };
-    getTeachers();
 
-    // Initialize data retrieval
+    // Initialize data
     self.getDatas();
+    self.getTeachers();
 
     self.AddCourse = function () {
-       /* self.NewCourse().TeacherId(self.SelectedCourse());*/
         switch (self.mode()) {
             case mode.create:
-                ajax.post(baseURL +"/", ko.toJS(self.NewCourse()))
+                ajax.post(baseURL + "/", ko.toJS(self.NewCourse()))
                     .done(function (result) {
                         self.Courses.push(new CourseVM(result));
                         self.getDatas();
+                        self.resetForm();
                     })
                     .fail((err) => {
                         console.log(err);
                     });
                 break;
             case mode.update:
-                ajax.put(baseURL + "/" + self.NewCourse().id(), ko.toJS(self.NewCourse()))
+                ajax.put(baseURL, ko.toJS(self.NewCourse()))
                     .done(function (result) {
-                        self.Courses.replace(self.NewCourse().id(), ko.toJS(self.NewCourse(result)));
+                        self.Courses.replace(self.SelectedCourse(), new CourseVM(result));
                         self.getDatas();
                         self.resetForm();
                     })
@@ -65,17 +68,38 @@ var CourseController = function () {
                 break;
         }
     };
+
+    // Function to delete a course
+    self.DeleteCourse = function (model) {
+        var courseId = ko.toJS(model).Id;
+        ajax.delete(baseURL + "?id=" + courseId)
+            .done((result) => {
+                self.Courses.remove(model);  // Remove the course from the array
+               
+            })
+            .fail(function (error) {
+                console.error("Error deleting course:", error);
+            });
+    };
+
     self.SelectCourse = function (model) {
         self.SelectedCourse(model);
-        self.NewCourse(new CourseVM(ko.toJS(model)));
+        self.NewCourse(new CourseVM(ko.toJS(model))); // Correct way to set NewCourse observable
         self.IsUpdated(true);
         self.mode(mode.update);
-    }
+        console.log(self.NewCourse());
+    };
+
     self.resetForm = function () {
         self.NewCourse(new CourseVM());
-        self.SelectedCourse(new CourseVM); // Reset selected teacher
+        self.SelectedCourse(new CourseVM());
         self.mode(mode.create);
         self.IsUpdated(false);
+    };
+
+    self.resetFormForRegister = function () {
+        self.resetForm();
+        self.IsUpdated(false);  // Explicitly set IsUpdated to false
     };
 };
 
@@ -109,7 +133,7 @@ var ajax = {
             },
             method: "PUT",
             url: url,
-            data: data  // Send the updated data as JSON
+            data: JSON.stringify(data)  // Send the updated data as JSON
         });
     },
 
@@ -120,3 +144,4 @@ var ajax = {
         });
     }
 };
+
