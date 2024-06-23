@@ -24,28 +24,30 @@ namespace TMS.Controllers.API
             _course = course;
             _teacher = teacher;
         }
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<CourseVM>> GetCourse(int id)
-        //{
-        //    var course = await _db.Courses.Include(c => c.Teacher)
-        //                               .FirstOrDefaultAsync(c => c.Id == id);
+        
 
-        //    if (course == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CourseVM>> GetCourse(int id)
+        {
+            var course = await _db.Courses.Include(c => c.Teacher)
+                                       .FirstOrDefaultAsync(c => c.Id == id);
 
-        //    var courseVM = new CourseVM
-        //    {
-        //        Id = course.Id,
-        //        Name = course.Name,
-        //        CreditHour = course.CreditHour,
-        //        TeacherId = course.TeacherId,
-        //        TeacherName = course.Teacher.firstName 
-        //    };
+            if (course == null)
+            {
+                return NotFound();
+            }
 
-        //    return Ok(courseVM);
-        //}
+            var courseVM = new CourseVM
+            {
+                Id = course.Id,
+                Name = course.Name,
+                CreditHour = course.CreditHour,
+                TeacherId = course.TeacherId,
+                TeacherName = course.Teacher.firstName
+            };
+
+            return Ok(courseVM);
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<CourseVM>>> GetAllCourse()

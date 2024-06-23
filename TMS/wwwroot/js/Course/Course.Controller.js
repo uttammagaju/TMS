@@ -83,8 +83,9 @@ var CourseController = function () {
     };
 
     self.SelectCourse = function (model) {
+        debugger
         self.SelectedCourse(model);
-        self.NewCourse(new CourseVM(ko.toJS(model))); // Correct way to set NewCourse observable
+        self.NewCourse(ko.toJS(model)); // Correct way to set NewCourse observable
         self.IsUpdated(true);
         self.mode(mode.update);
         console.log(self.NewCourse());
